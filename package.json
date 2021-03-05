@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/start-magma/server#readme",
   "dependencies": {
-    "express": "^4.16.1"
+    "mongoose": "^5.9.28",
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
