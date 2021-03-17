@@ -1,25 +1,27 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const {
-    MONGO_USERNAME,
-    MONGO_PASSWORD,
-    MONGO_HOSTNAME,
-    MONGO_PORT,
-    MONGO_DB
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_HOSTNAME,
+  MONGO_PORT,
+  MONGO_DB,
 } = process.env;
 
 const options = {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
 };
 
 const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
-mongoose.connect(url, options).then(function () {
-    console.log('MongoDB is connected');
-})
-    .catch(function (err) {
-        console.log(err);
-    });
+mongoose
+  .connect(url, options)
+  .then(function () {
+    console.log("MongoDB is connected");
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
