@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import db from "./db";
 import passport from "passport";
 import passportConfig from "./config/passport";
-
+import cors from 'cors';
 import {
   roleController,
   permissionController,
@@ -15,6 +15,7 @@ const port = process.env.NODE_JS_PORT || 8080;
 
 const app = express();
 
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
