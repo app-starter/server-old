@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const Schema = mongoose.Schema;
-
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     email: { type: String, unique: true },
     password: String,
@@ -11,7 +9,7 @@ const userSchema = new Schema(
     passwordResetExpires: Date,
     emailVerificationToken: String,
     emailVerified: Boolean,
-    role: { type: Schema.Types.ObjectId, ref: "Role", required: true },
+    role: { type: String, ref: "Role", required: true },
 
     profile: {
       name: String,

@@ -1,3 +1,4 @@
+import express from "express";
 import validator from "validator";
 import passport from "passport";
 import User from "../models/User";
@@ -62,7 +63,7 @@ export const userController = {
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      role: req.body.role,
+      role: "Member",
     });
 
     User.findOne({ email: req.body.email }, (err, existingUser) => {
@@ -93,7 +94,7 @@ export const userController = {
       users.forEach(function (user) {
         userMap[user._id] = user;
       });
-      res.send(users);
+      res.send(userMap);
     }).populate("Role");
   },
 };

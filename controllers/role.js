@@ -1,8 +1,9 @@
 import Role from "../models/Role";
 
 export const roleController = {
-  addRole: async (req, res) => {
+  addRole: async (req, res, next) => {
     const role = new Role({
+      _id: req.body.name,
       name: req.body.name,
       permissions: req.body.permissions,
     });
@@ -22,7 +23,7 @@ export const roleController = {
       });
     });
   },
-  updateRole: async (req, res) => {
+  updateRole: async (req, res, next) => {
     const role = new Role({
       _id: req.body.id,
       name: req.body.name,

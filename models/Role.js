@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const roleSchema = new Schema(
+const roleSchema = new mongoose.Schema(
   {
+    _id:{ type: String, unique: true },
     name: { type: String, unique: true },
-    users: [{ type: Schema.Types.ObjectId, ref: "User" }]
-}, { timestamps: true });
+    permissions: [
+      {
+        type: String,
+        ref: "Permission",
+      },
+    ],
+  },
+  { timestamps: true ,_id:false}
 );
 
 const Role = mongoose.model("Role", roleSchema);

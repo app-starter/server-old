@@ -1,5 +1,6 @@
 import passport from "passport";
 import User from "../models/User";
+
 const { Strategy: LocalStrategy } = require("passport-local");
 var JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
@@ -67,12 +68,5 @@ passport.use(
   })
 );
 
-/**
- * Login Required middleware.
- */
-exports.isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-};
+
+export default passport;
