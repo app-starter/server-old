@@ -6,6 +6,7 @@ import {
   userController,
   permissionController,
   roleController,
+  authController,
 } from "../controllers";
 import { permissions } from "../models/default-permissions";
 
@@ -15,8 +16,8 @@ router.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-router.post("/login", userController.postLogin);
-router.post("/signup", userController.postSignup);
+router.post("/login", authController.postLogin);
+router.post("/signup", authController.postSignup);
 
 router.get(
   "/getAllUser",
