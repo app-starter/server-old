@@ -1,19 +1,20 @@
 import express from "express";
 import validator from "validator";
 import passport from "passport";
-import User from "../models/User";
+import {User} from "../models";
 import utils from "../utils/util";
 
 export const userController = {
   postLogin: (req, res, next) => {
     const validationErrors = [];
-    if (!validator.isEmail(req.body.email))
-      validationErrors.push({ msg: "Please enter a valid email address." });
-    if (validator.isEmpty(req.body.password))
-      validationErrors.push({ msg: "Password cannot be blank." });
+    if (
+      !validator.isEmail(req.body.email) ||
+      validator.isEmpty(req.body.password)
+    )
+      validationErrors.push({ msg: "Incorrect username or password." });
 
     if (validationErrors.length) {
-      res.send(validationErrors);
+      res.status(401).send(validationErrors);
       return;
     }
     req.body.email = validator.normalizeEmail(req.body.email, {

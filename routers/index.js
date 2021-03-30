@@ -7,7 +7,7 @@ import {
   permissionController,
   roleController,
 } from "../controllers";
-import { DefaultData } from "../models/DefaultData";
+import { permissions } from "../models/default-permissions";
 
 const router = express.Router();
 
@@ -21,26 +21,26 @@ router.post("/signup", userController.postSignup);
 router.get(
   "/getAllUser",
   passport.authenticate("jwt", { session: false }),
-  permit(DefaultData.permissions.Permission_UserRead),
+  permit(permissions.UserRead),
   userController.getAllUser
 );
 
 router.post(
   "/addRole",
   passport.authenticate("jwt", { session: false }),
-  permit(DefaultData.permissions.Permission_RoleWrite),
+  permit(permissions.RoleWrite),
   roleController.addRole
 );
 router.post(
   "/updateRole",
   passport.authenticate("jwt", { session: false }),
-  permit(DefaultData.permissions.Permission_RoleWrite),
+  permit(permissions.RoleWrite),
   roleController.updateRole
 );
 router.get(
   "/getAllRole",
   passport.authenticate("jwt", { session: false }),
-  permit(DefaultData.permissions.Permission_RoleRead),
+  permit(permissions.RoleRead),
   roleController.all
 );
 

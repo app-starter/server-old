@@ -1,7 +1,6 @@
 import { Role } from "../models";
 
 // middleware for doing role-based permissions
-
 export default function permit(...permittedRoles) {
   // return a middleware
   return (request, response, next) => {

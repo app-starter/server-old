@@ -1,4 +1,4 @@
-import Role from "../models/Role";
+import { Role } from "../models";
 
 export const roleController = {
   addRole: async (req, res, next) => {

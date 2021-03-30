@@ -1,5 +1,5 @@
 import passport from "passport";
-import User from "../models/User";
+import {User} from "../models";
 
 const { Strategy: LocalStrategy } = require("passport-local");
 var JwtStrategy = require("passport-jwt").Strategy,

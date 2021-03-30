@@ -1,4 +1,4 @@
-import Permission from "../models/Permission";
+import {Permission} from "../models";
 
 export const permissionController = {
   all: (req, res) => {

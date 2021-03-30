@@ -1,16 +1,38 @@
 import { Permission, Role, User } from "../models";
-import { DefaultData } from "../models/DefaultData";
+import {permissions} from "../models/default-permissions";
+const defaultData = {
+  permissions: permissions,
+  roles: [
+    {
+      name: "Admin",
+      permissions: [
+        permissions.RoleWrite,
+        permissions.RoleDelete,
+        permissions.RoleRead,
+        permissions.UserRead,
+      ],
+    },
+    { name: "Member" },
+  ],
+  users: [
+    {
+      email: "admin@admin.com",
+      password: "123qwe",
+      role: "Admin",
+    },
+  ],
+};
 
 export default function seedData() {
-  createPermission(DefaultData.permissions.Permission_UserRead);
-  createPermission(DefaultData.permissions.Permission_RoleWrite);
-  createPermission(DefaultData.permissions.Permission_RoleRead);
-  createPermission(DefaultData.permissions.Permission_RoleDelete);
+  createPermission(permissions.UserRead);
+  createPermission(permissions.RoleWrite);
+  createPermission(permissions.RoleRead);
+  createPermission(permissions.RoleDelete);
 
-  DefaultData.roles.map((item) => {
+  defaultData.roles.map((item) => {
     createRole(item);
   });
-  DefaultData.users.map((item) => {
+  defaultData.users.map((item) => {
     createUser(item);
   });
 }
