@@ -2,19 +2,15 @@ import validator from "validator";
 import passport from "passport";
 import { User } from "../models";
 import utils from "../utils/util";
+import { ErrorHandler } from "../middleware/error-handler";
 
 export const authController = {
   postLogin: (req, res, next) => {
-    const validationErrors = [];
     if (
       !validator.isEmail(req.body.email) ||
       validator.isEmpty(req.body.password)
-    )
-      validationErrors.push({ msg: "Incorrect username or password." });
-
-    if (validationErrors.length) {
-      res.status(401).send(validationErrors);
-      return;
+    ) {
+      throw new ErrorHandler(401, "Incorrect username or password.");
     }
     req.body.email = validator.normalizeEmail(req.body.email, {
       gmail_remove_dots: false,
@@ -53,8 +49,11 @@ export const authController = {
       validationErrors.push({ msg: "Passwords do not match" });
 
     if (validationErrors.length) {
-      res.send(validationErrors);
-      return;
+      throw new ErrorHandler(
+        400,
+        "Can not sign up. Please try again",
+        validationErrors
+      );
     }
     req.body.email = validator.normalizeEmail(req.body.email, {
       gmail_remove_dots: false,
@@ -71,18 +70,23 @@ export const authController = {
         return next(err);
       }
       if (existingUser) {
-        res.send({ msg: "Account with that email address already exists." });
-        return;
+        return next(
+          new ErrorHandler(400, "Can not sign up. Please try again", [
+            {
+              msg: "Account with that email address already exists.",
+            },
+          ])
+        );
       }
       user.save((err) => {
         if (err) {
           return next(err);
         }
-        req.logIn(user, (err) => {
-          if (err) {
-            return next(err);
-          }
-          res.send({ msg: "Success! You are logged in." });
+        const tokenObject = utils.issueJWT(user);
+        res.status(200).json({
+          success: true,
+          token: tokenObject.token,
+          expiresIn: tokenObject.expires,
         });
       });
     });

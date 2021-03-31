@@ -10,6 +10,8 @@ import routers from "./routers";
 import passport from "./config/passport";
 import seedData from "./config/seed";
 
+import {handleError} from "./middleware/error-handler";
+
 //Configure mongoose's promise to global promise
 mongoose.promise = global.Promise;
 
@@ -39,7 +41,7 @@ if (!isProduction) {
 //Configure Mongoose
 mongoose.connect(CONNECTIONSTRING);
 mongoose.set("debug", true);
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true);
 
 seedData();
 
@@ -59,15 +61,8 @@ if (!isProduction) {
   });
 }
 
-app.use((err, req, res) => {
-  res.status(err.status || 500);
-
-  res.json({
-    errors: {
-      message: err.message,
-      error: {},
-    },
-  });
+app.use((err, req, res, next) => {
+  handleError(err, res);
 });
 
 app.listen(port, function () {

@@ -1,5 +1,6 @@
 import passport from "passport";
-import {User} from "../models";
+import { ErrorHandler } from "../middleware/error-handler";
+import { User } from "../models";
 
 const { Strategy: LocalStrategy } = require("passport-local");
 var JwtStrategy = require("passport-jwt").Strategy,
@@ -31,13 +32,25 @@ passport.use(
         return done(err);
       }
       if (!user) {
-        return done(null, false, { msg: `Email ${email} not found.` });
+        return done(
+          new ErrorHandler(401, "Something is wrong!", [
+            { msg: `Email ${email} not found.` },
+          ])
+        );
       }
       if (!user.password) {
-        return done(null, false, {
-          msg:
-            "Your account was registered using a sign-in provider. To enable password login, sign in using a provider, and then set a password under your user profile.",
-        });
+        return done(
+          new ErrorHandler(
+            401,
+            "Your account was registered using a sign-in provider",
+            [
+              {
+                msg:
+                  "Your account was registered using a sign-in provider. To enable password login, sign in using a provider, and then set a password under your user profile.",
+              },
+            ]
+          )
+        );
       }
       user.comparePassword(password, (err, isMatch) => {
         if (err) {
@@ -46,7 +59,13 @@ passport.use(
         if (isMatch) {
           return done(null, user);
         }
-        return done(null, false, { msg: "Invalid email or password." });
+        return done(
+          new ErrorHandler(401, "Invalid email or password.", [
+            {
+              msg: "Invalid email or password.",
+            },
+          ])
+        );
       });
     });
   })
@@ -67,6 +86,5 @@ passport.use(
     });
   })
 );
-
 
 export default passport;
