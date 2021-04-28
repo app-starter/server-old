@@ -1,12 +1,12 @@
 version: "3"
 
 networks:
-  magma-dev-network:
+  server-dev-network:
     driver: bridge
 
 services:
-  magma_node_dev:
-    container_name: magma_node_dev
+  backend_dev:
+    container_name: backend_dev
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,15 +20,15 @@ services:
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=magma_mongo_db
+      - MONGO_HOSTNAME=mongo_db
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB  
     networks:
-      - magma-dev-network  
+      - server-dev-network 
     restart: unless-stopped
-  magma_mongo_db:
+  mongo_db:
     image: mongo:4.4.4-bionic
-    container_name: magma_mongo_db
+    container_name: mongo_db
     restart: unless-stopped
     env_file: .env
     environment:
@@ -37,7 +37,7 @@ services:
     volumes:
       - dbdata:/data/db
     networks:
-      - magma-dev-network
+      - server-dev-network
   
 volumes:
   node_modules:
