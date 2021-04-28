@@ -50,13 +50,8 @@ export const roleController = {
   },
   all: (req, res) => {
     Role.find({}, function (err, roles) {
-      var roleMap = {};
-
-      roles.forEach(function (role) {
-        roleMap[role._id] = role;
-      });
-
-      res.send(roleMap);
+     
+      res.send(roles);
     });
   },
 };
