@@ -5,6 +5,7 @@ import { User } from "../models";
 const { Strategy: LocalStrategy } = require("passport-local");
 var JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
+var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -85,6 +86,43 @@ passport.use(
       }
     });
   })
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        "198158015305-dugl206e3s31qfa3v7s9fl32msdt2tl8.apps.googleusercontent.com",
+      clientSecret: "2z_v1y8suPjWM4Nz3uWz8f3-",
+      callbackURL: "http://localhost:8070/auth/google/callback",
+    },
+    function (accessToken, refreshToken, profile, done) {
+      console.log(profile);
+      User.findOne({ googleId: profile.id }).then((currentUser) => {
+        if (currentUser) {
+          currentUser.profile.name = profile.displayName;
+          (currentUser.email = profile._json.email),
+            currentUser.save((err) => {
+              if (err) {
+                done(err, null);
+              }
+              done(null, currentUser);
+            });
+        } else {
+          //if not, create a new user
+          new User({
+            googleId: profile.id,
+            email: profile._json.email,
+            role: "Member",
+          })
+            .save()
+            .then((newUser) => {
+              done(null, newUser);
+            });
+        }
+      });
+    }
+  )
 );
 
 export default passport;

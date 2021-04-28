@@ -37,6 +37,14 @@ export const authController = {
       });
     })(req, res, next);
   },
+  loginGoogle: (req, res) => {
+    console.log(req.user);
+
+    const tokenObject = utils.issueJWT(req.user);
+    res.redirect(
+      "//localhost:3000/googleLogin?token=" + encodeURI(tokenObject.token)
+    );
+  },
   postSignup: (req, res, next) => {
     const validationErrors = [];
     if (!validator.isEmail(req.body.email))

@@ -18,6 +18,21 @@ router.get("/", (req, res) => {
 
 router.post("/login", authController.postLogin);
 router.post("/signup", authController.postSignup);
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/plus.login",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { session: false }),
+  authController.loginGoogle
+);
 
 router.get(
   "/getAllUser",
@@ -46,5 +61,11 @@ router.get(
 );
 
 router.get("/getAllPermission", permissionController.all);
+
+router.get(
+  "/getMyPermission",
+  passport.authenticate("jwt", { session: false }),
+  permissionController.getMyPermission
+);
 
 export default router;

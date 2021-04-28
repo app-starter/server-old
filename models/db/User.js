@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     emailVerified: Boolean,
     role: { type: String, ref: "Role", required: true },
 
+    googleId: String,
     profile: {
       name: String,
       gender: String,
